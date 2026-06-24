@@ -15,6 +15,8 @@ import {
   RefreshCw,
   Trash2,
   FileDown,
+  CheckCircle,
+  LockIcon,
 } from "lucide-react"
 import { PageHeader, StatCard, StatusPill } from "@/components/page-parts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -74,6 +76,7 @@ export default function HrPage() {
   const deleteEmployee = useAppStore((state) => state.deleteEmployee)
   const deleteAttendance = useAppStore((state) => state.deleteAttendance)
   const deletePayrollRecord = useAppStore((state) => state.deletePayrollRecord)
+  const updatePayrollStatus = useAppStore((state) => state.updatePayrollStatus) // NEW
 
   // ===== Statistik =====
   const today = new Date().toISOString().slice(0, 10)
@@ -191,6 +194,22 @@ export default function HrPage() {
     setShowPayrollForm(false)
   }
 
+  // ===== Handler verifikasi payroll =====
+  const handleVerifyPayroll = (id: string, employeeName: string) => {
+    if (confirm(`Verifikasi payroll untuk "${employeeName}"?`)) {
+      updatePayrollStatus(id, "Verified")
+      alert(`Payroll "${employeeName}" berhasil diverifikasi.`)
+    }
+  }
+
+  // ===== Handler lock payroll =====
+  const handleLockPayroll = (id: string, employeeName: string) => {
+    if (confirm(`Kunci payroll untuk "${employeeName}"? Data tidak bisa diubah lagi.`)) {
+      updatePayrollStatus(id, "Locked")
+      alert(`Payroll "${employeeName}" berhasil dikunci.`)
+    }
+  }
+
   // ===== EXPORT PDF FUNCTIONS =====
   const exportEmployeesPDF = () => {
     if (employees.length === 0) return alert("Tidak ada data karyawan.")
@@ -287,9 +306,6 @@ export default function HrPage() {
     })
     doc.save("laporan-payroll.pdf")
   }
-
-  // ===== Data payroll yang sudah digenerate =====
-  const currentPayroll = payrollRecords.length > 0 ? payrollRecords : []
 
   return (
     <>
@@ -872,18 +888,45 @@ export default function HrPage() {
                             <StatusPill label={r.status} tone={payrollTone[r.status]} />
                           </TableCell>
                           <TableCell className="text-center">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => {
-                                if (confirm(`Yakin hapus payroll "${r.employeeName}"?`)) {
-                                  deletePayrollRecord(r.id)
-                                }
-                              }}
-                              className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center justify-center gap-1">
+                              {r.status === "Draft" && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-300"
+                                  onClick={() => handleVerifyPayroll(r.id, r.employeeName)}
+                                >
+                                  <CheckCircle className="mr-1 h-3 w-3" />
+                                  Verifikasi
+                                </Button>
+                              )}
+                              {r.status === "Verified" && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 px-2 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-300"
+                                  onClick={() => handleLockPayroll(r.id, r.employeeName)}
+                                >
+                                  <LockIcon className="mr-1 h-3 w-3" />
+                                  Kunci
+                                </Button>
+                              )}
+                              {r.status === "Locked" && (
+                                <span className="text-xs text-green-600 font-medium">✓ Terkunci</span>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={() => {
+                                  if (confirm(`Yakin hapus payroll "${r.employeeName}"?`)) {
+                                    deletePayrollRecord(r.id)
+                                  }
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}

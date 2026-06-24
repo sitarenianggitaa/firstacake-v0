@@ -209,12 +209,13 @@ interface AppState {
 
   // --- Payroll ---
   generatePayroll: (period: string) => void
+  updatePayrollStatus: (id: string, status: 'Draft' | 'Verified' | 'Locked') => void
 
   // --- Equipment ---
   addEquipment: (equipment: Omit<Equipment, 'id'>) => void
   addDamageReport: (report: Omit<DamageReport, 'id'>) => void
   addServiceRecord: (service: Omit<ServiceRecord, 'id'>) => void
-  addMaintenanceSchedule: (schedule: Omit<MaintenanceSchedule, 'id'>) => void // ✅ TAMBAHKAN INI
+  addMaintenanceSchedule: (schedule: Omit<MaintenanceSchedule, 'id'>) => void
 
   // --- Cash Session ---
   openCashSession: (shift: 'Pagi' | 'Sore', cashierId: string, openingBalance: number) => void
@@ -240,7 +241,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      // Data awal (sama seperti sebelumnya)
+      // Data awal
       rawMaterials: [
         { id: 'RM-001', name: 'Tepung Terigu', unit: 'kg', price: 12000, currentStock: 50, minStock: 10 },
         { id: 'RM-002', name: 'Gula Pasir', unit: 'kg', price: 15000, currentStock: 30, minStock: 5 },
@@ -319,13 +320,14 @@ export const useAppStore = create<AppState>()(
         { id: 'EMP-002', fullName: 'Cecil', position: 'Kepala Kasir', department: 'Kasir', employmentType: 'Tetap', phone: '0812222222', baseSalary: 5000000, dailyWage: 0, joinDate: '2023-06-01' },
         { id: 'EMP-003', fullName: 'Dina', position: 'Kepala Produksi', department: 'Produksi', employmentType: 'Tetap', phone: '0813333333', baseSalary: 5500000, dailyWage: 0, joinDate: '2023-01-01' },
         { id: 'EMP-004', fullName: 'Rachel', position: 'Tim Produksi', department: 'Produksi', employmentType: 'Daily Worker', phone: '0814444444', baseSalary: 0, dailyWage: 100000, joinDate: '2024-02-01' },
-        { id: 'EMP-004', fullName: 'Sita', position: 'Admin/Finance', department: 'Finance', employmentType: 'Tetap', phone: '0815555555', baseSalary: 100000, dailyWage: 0, joinDate: '2024-02-01' },
+        { id: 'EMP-005', fullName: 'Sita', position: 'Admin/Finance', department: 'Finance', employmentType: 'Tetap', phone: '0815555555', baseSalary: 4500000, dailyWage: 0, joinDate: '2023-07-01' },
       ],
       attendances: [
         { id: 'ATT-001', employeeId: 'EMP-001', employeeName: 'Aisy', date: '2026-06-23', status: 'Hadir', checkIn: '08:00', checkOut: '16:00', recordedBy: 'Sistem' },
         { id: 'ATT-002', employeeId: 'EMP-002', employeeName: 'Cecil', date: '2026-06-23', status: 'Hadir', checkIn: '07:30', checkOut: '15:30', recordedBy: 'Sistem' },
         { id: 'ATT-003', employeeId: 'EMP-003', employeeName: 'Dina', date: '2026-06-23', status: 'Hadir', checkIn: '08:00', checkOut: '16:00', recordedBy: 'Sistem' },
         { id: 'ATT-004', employeeId: 'EMP-004', employeeName: 'Rachel', date: '2026-06-23', status: 'Izin', checkIn: '-', checkOut: '-', recordedBy: 'Sistem', notes: 'Sakit' },
+        { id: 'ATT-005', employeeId: 'EMP-005', employeeName: 'Sita', date: '2026-06-23', status: 'Hadir', checkIn: '08:30', checkOut: '16:30', recordedBy: 'Sistem' },
       ],
       payrollRecords: [],
       equipments: [
@@ -518,6 +520,14 @@ export const useAppStore = create<AppState>()(
         alert(`Payroll periode ${period} berhasil digenerate!`)
       },
 
+      updatePayrollStatus: (id, status) => {
+        set((state) => ({
+          payrollRecords: state.payrollRecords.map((r) =>
+            r.id === id ? { ...r, status } : r
+          ),
+        }))
+      },
+
       addEquipment: (equipment) => {
         const newId = `EQ-${String(get().equipments.length + 1).padStart(3, '0')}`
         set((state) => ({
@@ -539,7 +549,6 @@ export const useAppStore = create<AppState>()(
         }))
       },
 
-      // ✅ TAMBAHKAN FUNGSI INI
       addMaintenanceSchedule: (schedule) => {
         const newId = `MS-${Date.now()}`
         set((state) => ({
