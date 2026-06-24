@@ -6,36 +6,36 @@ Sistem manajemen terpadu untuk toko kue **Firsta Cake**. Terdiri dari modul **Po
 
 ### 🧾 Point of Sale (POS)
 - Input transaksi dengan pilihan produk dan quantity
-- Custom order (kue custom, harga manual, catatan khusus)
+- Custom order
 - Pilihan channel order: Offline, WhatsApp, Instagram, Grab
 - Metode pembayaran: Tunai & Transfer
 - Cetak struk digital dengan modal
-- Buka/tutup sesi kas dengan shift (Pagi/Sore) dan kasir
+- Buka/tutup sesi kas dengan shift dan kasir
 - Rekap penjualan harian & laporan PDF
 - Hapus riwayat transaksi
 
 ### 📦 Inventaris
-- Kelola bahan baku (CRUD + stok)
-- Kelola produk jadi (CRUD + stok + resep)
+- Kelola bahan baku
+- Kelola produk jadi
 - Catat pemakaian bahan baku harian
-- Catat produksi (otomatis kurangi bahan baku)
+- Catat produksi
 - Penerimaan bahan dari supplier
-- Mutasi stok (audit trail)
+- Mutasi stok
 - Laporan PDF setiap tab
-- Hapus data (bahan, produk, supplier, penerimaan, mutasi)
+- Hapus data
 
 ### 👥 HR / Payroll
-- Kelola data karyawan (CRUD)
+- Kelola data karyawan
 - Input absensi harian (Hadir, Izin, Sakit, Alpa, Libur)
 - Generate payroll otomatis per periode
 - Laporan PDF (karyawan, absensi, payroll)
 - Hapus data karyawan, absensi, payroll
 
 ### 🔧 Servis Alat
-- Kelola daftar alat produksi (CRUD)
+- Kelola daftar alat produksi
 - Laporan kerusakan alat
 - Catat riwayat servis
-- Jadwal perawatan rutin (CRUD + pengingat otomatis)
+- Jadwal perawatan rutin
 - Laporan PDF setiap tab
 
 
