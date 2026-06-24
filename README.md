@@ -1,4 +1,4 @@
-# 🍰 Firsta Cake — Sistem Operasional
+# Firsta Cake — Sistem Operasional
 
 Sistem manajemen terpadu untuk toko kue **Firsta Cake**. Terdiri dari modul **Point of Sale (POS)**, **Inventaris**, **HR / Payroll**, dan **Servis Alat**. Dibangun dengan Next.js, TypeScript, Zustand, dan Tailwind CSS.
 

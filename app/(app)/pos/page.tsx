@@ -389,7 +389,7 @@ export default function PosPage() {
   )
 
   // ============================================================
-// MODAL CUSTOM ORDER - STABIL (mirip buka kas)
+// MODAL CUSTOM ORDER
 // ============================================================
 const CustomOrderModal = () => {
   // State lokal untuk form custom order (tidak memicu re-render global)
@@ -496,7 +496,7 @@ const CustomOrderModal = () => {
 }
 
   // ============================================================
-  // MODAL BUKA KAS - (tidak diubah)
+  // MODAL BUKA KAS
   // ============================================================
   const OpenCashModal = () => {
     const [localShift, setLocalShift] = useState<"Pagi" | "Sore">("Pagi")
